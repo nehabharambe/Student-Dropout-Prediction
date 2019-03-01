@@ -3,61 +3,83 @@ library(fBasics)
 
 basicStats(financialData$Marital.Status)
 
+financialData$Marital.Status <- sub("^$", "Unknown", financialData$Marital.Status)
+financialData$Marital.Status <- as.factor(financialData$Marital.Status)
 
-financialData.trainLabels <- merge(x = TrainLabels, y = financialData,
-                                   by.y = "ID.with.leading", by.x = "StudentID")
-
-financialData.testIDs <- merge(x = testIds, y = financialData,
-                                   by.y = "ID.with.leading", by.x = "StudentID")
-financialData.testIDs
-
-financialData.trainLabels$Dropout <- as.factor(financialData.trainLabels$Dropout)
-financialData.trainLabels$Marital.Status <- sub("^$", "Unknown", financialData.trainLabels$Marital.Status)
-financialData.trainLabels$Marital.Status <- as.factor(financialData.trainLabels$Marital.Status)
-summary(financialData.trainLabels$Mother.s.Highest.Grade.Level)
-table(financialData.trainLabels$Mother.s.Highest.Grade.Level)
-financialData.trainLabels$Mother.s.Highest.Grade.Level <- sub("^$", "Unknown", financialData.trainLabels$Mother.s.Highest.Grade.Level)
-financialData.trainLabels$Mother.s.Highest.Grade.Level <- as.factor(financialData.trainLabels$Mother.s.Highest.Grade.Level)
+financialData$Housing <- sub("^$", "Unknown", financialData$Housing)
+financialData$Housing <- as.factor(financialData$Housing)
 
 
+financialData$Father.s.Highest.Grade.Level <- sub("^$", "Unknown", financialData$Father.s.Highest.Grade.Level)
+financialData$Father.s.Highest.Grade.Level <- as.factor(financialData$Father.s.Highest.Grade.Level)
 
+financialData$Mother.s.Highest.Grade.Level <- sub("^$", "Unknown", financialData$Mother.s.Highest.Grade.Level)
+financialData$Mother.s.Highest.Grade.Level <- as.factor(financialData$Mother.s.Highest.Grade.Level)
 
 library(imputeTS)
-financialData.trainLabels <- na.replace(financialData.trainLabels, 0)
-Store <- na.replace(Store,0)
-summary(Store)
-summary(financialData$Marital.Status)
-
-#Adaptive Boosting ----
-install.packages("caret")
-library(caret)
-intrain <- createDataPartition(financialData.trainLabels$Dropout,p=0.75,list = FALSE)
-train1 <- financialData.trainLabels[intrain,]
-test1 <- financialData.trainLabels[-intrain,]
-trctrl <- trainControl(method = "cv", number = 5)
+financialData <- na.replace(financialData, 0)
 
 
-#bagging 
-bag_fit <- train(Dropout ~.-StudentID, data = train1, method = "treebag", trControl=trctrl)
+#Merege static Data  -------
+
+studentStaticData <- rbind(stFall2011,stFall2012, stFall2013, stFall2014, stFall2015, stFall2016, stSpring2012, stSpring2013, stSpring2014, stSpring2015, stSpring2016)
+
+summary(studentStaticData)
+studentStaticData$Campus <- NULL
 
 
-bag_fit
-predictions <- predict(bag_fit, newdata = test1)
-confusionMatrix(predictions,test1$Dropout)
-#To see the importance of the variables
-bagImp <- varImp(bag_fit, scale=TRUE)
-bagImp
-plot(bagImp)
+studentStaticData$Gender <- as.factor(studentStaticData$Gender)
 
-predictions <- predict(bag_fit, newdata = financialData.testIDs)
-model1_output <- data.frame(financialData.testIDs$StudentID, predictions)
-colnames(model1_output) <- c("StudentID", "Dropout")
+studentStaticData$Hispanic <- ifelse(studentStaticData$Hispanic == -1, NA, studentStaticData$Hispanic)
+studentStaticData$Hispanic <- as.factor(studentStaticData$Hispanic)
 
-model1_output
-getwd()
-setwd("/cloud/project/")
+studentStaticData$AmericanIndian <- ifelse(studentStaticData$AmericanIndian == -1, NA, studentStaticData$AmericanIndian)
+studentStaticData$AmericanIndian <- as.factor(studentStaticData$AmericanIndian)
+
+studentStaticData$Asian <- ifelse(studentStaticData$Asian == -1, NA, studentStaticData$Asian)
+studentStaticData$Asian <- as.factor(studentStaticData$Asian)
+
+studentStaticData$Black <- ifelse(studentStaticData$Black == -1, NA, studentStaticData$Black)
+studentStaticData$Black <- as.factor(studentStaticData$Black)
+
+studentStaticData$NativeHawaiian <- ifelse(studentStaticData$NativeHawaiian == -1, NA, studentStaticData$NativeHawaiian)
+studentStaticData$NativeHawaiian <- as.factor(studentStaticData$NativeHawaiian)
+
+studentStaticData$White <- ifelse(studentStaticData$White == -1, NA, studentStaticData$White)
+studentStaticData$White <- as.factor(studentStaticData$White)
+
+studentStaticData$TwoOrMoreRace <- ifelse(studentStaticData$TwoOrMoreRace == -1, NA, studentStaticData$TwoOrMoreRace)
+studentStaticData$TwoOrMoreRace <- as.factor(studentStaticData$TwoOrMoreRace)
 
 
-write.csv(model1_output,file = 'SubmissionFile.csv')
 
 
+
+
+studentProgressData <- rbind(spFall2011,spFall2012,spFall2013,spFall2014,spFall2015,spFall2016,spSpring2012,spSpring2013,spSpring2014,spSpring2015,spSpring2016,spSpring2017,spSum2012,spSum2013,spSum2014,spSum2015,spSum2016,spSum2017)
+
+studentProgressData_unique <- unique(studentProgressData$StudentID)
+studentStaticData_unique <- unique(studentStaticData$StudentID)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+a <- studentProgressData_unique[!(studentProgressData_unique %in% studentStaticData_unique)]
+
+studentStaticData_unique <- data.frame(studentStaticData_unique)
+studentProgressData_unique <- data.frame(studentProgressData_unique)

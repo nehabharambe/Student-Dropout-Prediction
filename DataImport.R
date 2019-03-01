@@ -38,3 +38,8 @@ setwd("/cloud/project")
 getwd()
 
 TrainLabels <- read.csv("DropoutTrainLabels.csv", header = T)
+
+
+setwd("/cloud/project/Student Retention Challenge Data/Test Data")
+testIds <- read.csv("TestIDs.csv", header = T)
+
