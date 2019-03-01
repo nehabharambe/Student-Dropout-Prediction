@@ -1,15 +1,32 @@
 install.packages("fBasics")
 library(fBasics)
 
-basicStats(financialData$ID.with.leading)
-financialData$ID.with.leading <- as.numeric(financialData$ID.with.leading)
-
+basicStats(financialData$Marital.Status)
 
 
 financialData.trainLabels <- merge(x = TrainLabels, y = financialData,
                                    by.y = "ID.with.leading", by.x = "StudentID")
 
-summary(financialData.trainLabels)
+financialData.testIDs <- merge(x = testIds, y = financialData,
+                                   by.y = "ID.with.leading", by.x = "StudentID")
+financialData.testIDs
+
+financialData.trainLabels$Dropout <- as.factor(financialData.trainLabels$Dropout)
+financialData.trainLabels$Marital.Status <- sub("^$", "Unknown", financialData.trainLabels$Marital.Status)
+financialData.trainLabels$Marital.Status <- as.factor(financialData.trainLabels$Marital.Status)
+summary(financialData.trainLabels$Mother.s.Highest.Grade.Level)
+table(financialData.trainLabels$Mother.s.Highest.Grade.Level)
+financialData.trainLabels$Mother.s.Highest.Grade.Level <- sub("^$", "Unknown", financialData.trainLabels$Mother.s.Highest.Grade.Level)
+financialData.trainLabels$Mother.s.Highest.Grade.Level <- as.factor(financialData.trainLabels$Mother.s.Highest.Grade.Level)
+
+
+
+
+library(imputeTS)
+financialData.trainLabels <- na.replace(financialData.trainLabels, 0)
+Store <- na.replace(Store,0)
+summary(Store)
+summary(financialData$Marital.Status)
 
 #Adaptive Boosting ----
 install.packages("caret")
@@ -18,18 +35,29 @@ intrain <- createDataPartition(financialData.trainLabels$Dropout,p=0.75,list = F
 train1 <- financialData.trainLabels[intrain,]
 test1 <- financialData.trainLabels[-intrain,]
 trctrl <- trainControl(method = "cv", number = 5)
-#Fit Ada Boost
-boost_fit <- train(Dropout ~.-StudentID, data = train1, method = "ada")
-#To see model details
-boost_fit
-boost_fit$bestTune
-#Plot complexity parameter tuning runs
-plot(boost_fit)
-#Predict
-predictions <- predict(boost_fit, newdata = test1)
-#Performance metrics
-confusionMatrix(predictions,test1$High)
+
+
+#bagging 
+bag_fit <- train(Dropout ~.-StudentID, data = train1, method = "treebag", trControl=trctrl)
+
+
+bag_fit
+predictions <- predict(bag_fit, newdata = test1)
+confusionMatrix(predictions,test1$Dropout)
 #To see the importance of the variables
-boostImp <- varImp(boost_fit)
-boostImp
-plot(boostImp)
+bagImp <- varImp(bag_fit, scale=TRUE)
+bagImp
+plot(bagImp)
+
+predictions <- predict(bag_fit, newdata = financialData.testIDs)
+model1_output <- data.frame(financialData.testIDs$StudentID, predictions)
+colnames(model1_output) <- c("StudentID", "Dropout")
+
+model1_output
+getwd()
+setwd("/cloud/project/")
+
+
+write.csv(model1_output,file = 'SubmissionFile.csv')
+
+
