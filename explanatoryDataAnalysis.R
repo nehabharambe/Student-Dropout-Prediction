@@ -30,28 +30,60 @@ studentStaticData$Campus <- NULL
 
 studentStaticData$Gender <- as.factor(studentStaticData$Gender)
 
-studentStaticData$Hispanic <- ifelse(studentStaticData$Hispanic == -1, NA, studentStaticData$Hispanic)
+#studentStaticData$Hispanic <- ifelse(studentStaticData$Hispanic == -1, NA, studentStaticData$Hispanic)
 studentStaticData$Hispanic <- as.factor(studentStaticData$Hispanic)
 
-studentStaticData$AmericanIndian <- ifelse(studentStaticData$AmericanIndian == -1, NA, studentStaticData$AmericanIndian)
+#studentStaticData$AmericanIndian <- ifelse(studentStaticData$AmericanIndian == -1, NA, studentStaticData$AmericanIndian)
 studentStaticData$AmericanIndian <- as.factor(studentStaticData$AmericanIndian)
 
-studentStaticData$Asian <- ifelse(studentStaticData$Asian == -1, NA, studentStaticData$Asian)
+#studentStaticData$Asian <- ifelse(studentStaticData$Asian == -1, NA, studentStaticData$Asian)
 studentStaticData$Asian <- as.factor(studentStaticData$Asian)
 
-studentStaticData$Black <- ifelse(studentStaticData$Black == -1, NA, studentStaticData$Black)
+#studentStaticData$Black <- ifelse(studentStaticData$Black == -1, NA, studentStaticData$Black)
 studentStaticData$Black <- as.factor(studentStaticData$Black)
 
-studentStaticData$NativeHawaiian <- ifelse(studentStaticData$NativeHawaiian == -1, NA, studentStaticData$NativeHawaiian)
+#studentStaticData$NativeHawaiian <- ifelse(studentStaticData$NativeHawaiian == -1, NA, studentStaticData$NativeHawaiian)
 studentStaticData$NativeHawaiian <- as.factor(studentStaticData$NativeHawaiian)
 
-studentStaticData$White <- ifelse(studentStaticData$White == -1, NA, studentStaticData$White)
+#studentStaticData$White <- ifelse(studentStaticData$White == -1, NA, studentStaticData$White)
 studentStaticData$White <- as.factor(studentStaticData$White)
 
-studentStaticData$TwoOrMoreRace <- ifelse(studentStaticData$TwoOrMoreRace == -1, NA, studentStaticData$TwoOrMoreRace)
+#studentStaticData$TwoOrMoreRace <- ifelse(studentStaticData$TwoOrMoreRace == -1, NA, studentStaticData$TwoOrMoreRace)
 studentStaticData$TwoOrMoreRace <- as.factor(studentStaticData$TwoOrMoreRace)
 
-for (i in )
+studentStaticData$HSDip <- as.factor(studentStaticData$HSDip)
+studentStaticData$HSGPAUnwtd <- as.factor(studentStaticData$HSGPAUnwtd)
+studentStaticData$HSGPAWtd <- as.factor(studentStaticData$HSGPAWtd)
+studentStaticData$FirstGen <- as.factor(studentStaticData$FirstGen)
+studentStaticData$DualHSSummerEnroll <- as.factor(studentStaticData$DualHSSummerEnroll)
+studentStaticData$EnrollmentStatus <- as.factor(studentStaticData$EnrollmentStatus)
+studentStaticData$HighDeg <- as.factor(studentStaticData$HighDeg)
+studentStaticData$MathPlacement <- as.factor(studentStaticData$MathPlacement)
+studentStaticData$EngPlacement <- as.factor(studentStaticData$EngPlacement)
+studentStaticData$GatewayMathStatus <- as.factor(studentStaticData$GatewayMathStatus)
+studentStaticData$GatewayEnglishStatus <- as.factor(studentStaticData$GatewayEnglishStatus)
+#studentStaticData$HSDipYr <- as.numeric(studentStaticData$HSDipYr)
+
+summary(studentStaticData)
+
+
+studentStaticData$Campus <- NULL
+studentStaticData$HSGPAWtd <- NULL
+studentStaticData$FirstGen <- NULL
+studentStaticData$DualHSSummerEnroll <- NULL
+#StudentData.trainLabels$State <- sub("^$", "Unknown", financialData$State)
+
+library(imputeTS)
+studentStaticData$Zip <- na.replace(studentStaticData$Zip, 0)
+
+#library(imputeTS)
+studentStaticData$BirthYear <- na.replace(studentStaticData$BirthYear, 1989)
+
+
+
+
+
+
 
 
 
@@ -60,6 +92,8 @@ studentProgressData <- rbind(spFall2011,spFall2012,spFall2013,spFall2014,spFall2
 
 studentProgressData_unique <- unique(studentProgressData$StudentID)
 studentStaticData_unique <- unique(studentStaticData$StudentID)
+
+
 
 
 
