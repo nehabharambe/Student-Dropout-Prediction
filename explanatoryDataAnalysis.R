@@ -51,7 +51,7 @@ studentStaticData$White <- as.factor(studentStaticData$White)
 studentStaticData$TwoOrMoreRace <- ifelse(studentStaticData$TwoOrMoreRace == -1, NA, studentStaticData$TwoOrMoreRace)
 studentStaticData$TwoOrMoreRace <- as.factor(studentStaticData$TwoOrMoreRace)
 
-
+for (i in )
 
 
 
