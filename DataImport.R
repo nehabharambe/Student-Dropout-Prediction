@@ -1,7 +1,7 @@
 getwd()
-setwd("/cloud/project/Student Retention Challenge Data/Student Financial Aid Data")
+setwd("/Users/Nehu/StudentDropoutChallenge/Student Retention Challenge Data/Student Financial Aid Data")
 financialData <- read.csv("2011-2017_Cohorts_Financial_Aid_and_Fafsa_Data.csv", header = TRUE)
-setwd("/cloud/project/Student Retention Challenge Data/Student Progress Data")
+setwd("/Users/Nehu/StudentDropoutChallenge/Student Retention Challenge Data/Student Progress Data")
 spFall2011 <- read.csv("Fall 2011_SP.csv",header = T)
 spFall2012 <- read.csv("Fall 2012_SP.csv",header = T)
 spFall2013 <- read.csv("Fall 2013_SP.csv",header = T)
@@ -21,7 +21,7 @@ spSum2015 <- read.csv("Sum 2015.csv",header = T)
 spSum2016 <- read.csv("Sum 2016.csv",header = T)
 spSum2017 <- read.csv("Sum 2017.csv",header = T)
 
-setwd("/cloud/project/Student Retention Challenge Data/Student Static Data")
+setwd("/Users/Nehu/StudentDropoutChallenge/Student Retention Challenge Data/Student Static Data")
 stFall2011 <- read.csv("Fall 2011_ST.csv",header = T)
 stFall2012 <- read.csv("Fall 2012.csv",header = T)
 stFall2013 <- read.csv("Fall 2013.csv",header = T)
@@ -34,12 +34,12 @@ stSpring2014 <- read.csv("Spring 2014.csv",header = T)
 stSpring2015 <- read.csv("Spring 2015.csv",header = T)
 stSpring2016 <- read.csv("Spring 2016.csv",header = T)
 
-setwd("/cloud/project")
+setwd("/Users/Nehu/StudentDropoutChallenge")
 getwd()
 
 TrainLabels <- read.csv("DropoutTrainLabels.csv", header = T)
 
 
-setwd("/cloud/project/Student Retention Challenge Data/Test Data")
+setwd("/Users/Nehu/StudentDropoutChallenge/Student Retention Challenge Data/Test Data")
 testIds <- read.csv("TestIDs.csv", header = T)
 

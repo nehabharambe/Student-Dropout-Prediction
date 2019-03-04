@@ -20,7 +20,7 @@ library(imputeTS)
 financialData <- na.replace(financialData, 0)
 
 
-#Merege static Data  -------
+#Merge static Data  -------
 
 studentStaticData <- rbind(stFall2011,stFall2012, stFall2013, stFall2014, stFall2015, stFall2016, stSpring2012, stSpring2013, stSpring2014, stSpring2015, stSpring2016)
 
@@ -29,6 +29,7 @@ studentStaticData$Campus <- NULL
 
 
 studentStaticData$Gender <- as.factor(studentStaticData$Gender)
+studentStaticData$CohortTerm <- as.factor(studentStaticData$CohortTerm)
 
 #studentStaticData$Hispanic <- ifelse(studentStaticData$Hispanic == -1, NA, studentStaticData$Hispanic)
 studentStaticData$Hispanic <- as.factor(studentStaticData$Hispanic)
@@ -62,7 +63,8 @@ studentStaticData$MathPlacement <- as.factor(studentStaticData$MathPlacement)
 studentStaticData$EngPlacement <- as.factor(studentStaticData$EngPlacement)
 studentStaticData$GatewayMathStatus <- as.factor(studentStaticData$GatewayMathStatus)
 studentStaticData$GatewayEnglishStatus <- as.factor(studentStaticData$GatewayEnglishStatus)
-#studentStaticData$HSDipYr <- as.numeric(studentStaticData$HSDipYr)
+studentStaticData$BirthYear <- as.factor(studentStaticData$BirthYear)
+studentStaticData$BirthMonth <- as.factor(studentStaticData$BirthMonth)
 
 summary(studentStaticData)
 
@@ -80,40 +82,25 @@ studentStaticData$Zip <- na.replace(studentStaticData$Zip, 0)
 studentStaticData$BirthYear <- na.replace(studentStaticData$BirthYear, 1989)
 
 
-
-
-
-
-
-
-
+###### Merge progress data --------
 
 studentProgressData <- rbind(spFall2011,spFall2012,spFall2013,spFall2014,spFall2015,spFall2016,spSpring2012,spSpring2013,spSpring2014,spSpring2015,spSpring2016,spSpring2017,spSum2012,spSum2013,spSum2014,spSum2015,spSum2016,spSum2017)
 
-studentProgressData_unique <- unique(studentProgressData$StudentID)
-studentStaticData_unique <- unique(studentStaticData$StudentID)
+studentProgressData$CohortTerm <- as.factor(studentProgressData$CohortTerm)
+studentProgressData$Term <- as.factor(studentProgressData$Term)
+studentProgressData$CompleteDevMath <- as.factor(studentProgressData$CompleteDevMath)
+studentProgressData$CompleteDevEnglish <- as.factor(studentProgressData$CompleteDevEnglish)
+studentProgressData$Major1 <- as.factor(studentProgressData$Major1)
+studentProgressData$Major2 <- as.factor(studentProgressData$Major2)
+studentProgressData$Complete1 <- as.factor(studentProgressData$Complete1)
+studentProgressData$Complete2 <- as.factor(studentProgressData$Complete2)
+studentProgressData$TransferIntent <- as.factor(studentProgressData$TransferIntent)
+studentProgressData$DegreeTypeSought <- as.factor(studentProgressData$DegreeTypeSought)
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-a <- studentProgressData_unique[!(studentProgressData_unique %in% studentStaticData_unique)]
-
-studentStaticData_unique <- data.frame(studentStaticData_unique)
-studentProgressData_unique <- data.frame(studentProgressData_unique)
+combinedStudentData <- merge(x = studentProgressData, y = studentStaticData,
+                             by = c("StudentID","Cohort","CohortTerm"))
