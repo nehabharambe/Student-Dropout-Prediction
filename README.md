@@ -12,3 +12,6 @@ divided into three parts
 1. Static Data
 2. Progress Data
 3. Financial Aid Data
+
+
+Project Report includes the algorithms and related work for this project
